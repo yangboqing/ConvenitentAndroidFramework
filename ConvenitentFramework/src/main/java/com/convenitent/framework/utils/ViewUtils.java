@@ -1,4 +1,4 @@
-package com.convenitent.framework.view;
+package com.convenitent.framework.utils;
 
 import android.app.Activity;
 import android.app.Dialog;

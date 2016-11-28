@@ -9,7 +9,8 @@ import android.widget.Button;
 
 import com.convenitent.framework.activity.SupportActivity;
 import com.convenitent.framework.dialog.ConfirmDialogFragment;
-import com.convenitent.framework.view.ViewUtils;
+import com.convenitent.framework.http.volley.VolleyFactory;
+import com.convenitent.framework.utils.ViewUtils;
 import com.convenitent.test.R;
 
 public class MainActivity extends SupportActivity implements View.OnClickListener{
@@ -17,7 +18,6 @@ public class MainActivity extends SupportActivity implements View.OnClickListene
     private Button dialog1Btn;
     private Button dialog2Btn;
     private Button dialog3Btn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,8 +29,7 @@ public class MainActivity extends SupportActivity implements View.OnClickListene
         dialog1Btn.setOnClickListener(this);
         dialog2Btn.setOnClickListener(this);
         dialog3Btn.setOnClickListener(this);
-
-
+        VolleyFactory.getInstance(getApplicationContext()).initVolley();
     }
 
 

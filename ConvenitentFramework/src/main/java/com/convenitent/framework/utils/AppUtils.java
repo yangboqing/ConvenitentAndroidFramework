@@ -1,4 +1,4 @@
-package com.convenitent.framework.app;
+package com.convenitent.framework.utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 
-import com.convenitent.framework.utils.FileUtils;
+import com.convenitent.framework.app.$;
 
 import java.io.File;
 import java.util.List;
@@ -138,6 +138,18 @@ public final class AppUtils {
         return signature.hashCode() == presetHashCode;
     }
 
+
+    /**
+     * 获取dalvik给应用所分配的堆大小
+     * @return
+     */
+    public static int getMemorySize() {
+        ActivityManager activityManager = (ActivityManager) $.sAppContext.getSystemService(Context
+                .ACTIVITY_SERVICE);
+        int memClass = activityManager.getMemoryClass();
+        LogUtils.$i("获取dalvik虚拟机分配给app的内存大小:"+memClass);
+        return memClass;
+    }
     /**
      * 删除应用数据： cache, file, share prefs, databases
      * @param context
@@ -148,6 +160,8 @@ public final class AppUtils {
         $clearSharedPreference(context);
         $clearDatabase(context);
     }
+
+
 
     /**
      * 删除应用缓存目录

@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.convenitent.framework.R;
 import com.convenitent.framework.app.$;
-import com.convenitent.framework.http.HttpUtils;
+import com.convenitent.framework.http.DownloadUtils;
 import com.convenitent.framework.utils.ToastUtils;
 
 import java.io.File;
@@ -83,7 +83,7 @@ public class UpdateService extends Service {
     };
     private Handler mHandler = new Handler(mHandlerCallBack);
 
-    private HttpUtils.DownloadCallBack mDownloadCallBack = new HttpUtils.DownloadCallBack() {
+    private DownloadUtils.DownloadCallBack mDownloadCallBack = new DownloadUtils.DownloadCallBack() {
 
         @Override
         public void onDownloading(int progress) {
@@ -258,7 +258,7 @@ public class UpdateService extends Service {
                         try {
                             sendMessage(DOWNLOAD_STATE_START);
                             mIsDownloading = true;
-                            HttpUtils.$download(mDownloadUrl, mDestFile, false, mDownloadCallBack);
+                            DownloadUtils.$download(mDownloadUrl, mDestFile, false, mDownloadCallBack);
                         } catch (Exception e) {
                             sendMessage(DOWNLOAD_STATE_FAILURE);
                             e.printStackTrace();

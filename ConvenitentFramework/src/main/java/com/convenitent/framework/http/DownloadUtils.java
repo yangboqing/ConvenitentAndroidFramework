@@ -24,7 +24,7 @@ import java.util.zip.GZIPInputStream;
  * Created by yangboqing on 16/8/16.
  * 上传和下载工具类
  */
-public final class HttpUtils {
+public final class DownloadUtils {
 
     private static ExecutorService mExecutorService = Executors.newFixedThreadPool(4);
 

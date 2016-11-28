@@ -7,7 +7,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.convenitent.framework.R;
 import com.convenitent.framework.app.$;
-import com.convenitent.framework.app.AppUtils;
+import com.convenitent.framework.utils.AppUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;

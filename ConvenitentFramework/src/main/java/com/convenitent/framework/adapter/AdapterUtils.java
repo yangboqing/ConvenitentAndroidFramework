@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.convenitent.framework.view.ViewUtils;
+import com.convenitent.framework.utils.ViewUtils;
 
 import java.util.List;
 
