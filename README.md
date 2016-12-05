@@ -1,0 +1,3 @@
+# ConvenitentAndroidFramework
+本库主要整理汇总自己平常做Android开发经常会用到的代码。方便己迁移到各大项目的开发。
+如果你对本库的代码感兴趣，欢迎拿走。如果有bug，欢迎在Github上给我提个Issue反馈一下，我会尽快修复。
