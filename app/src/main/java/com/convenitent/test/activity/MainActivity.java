@@ -12,12 +12,16 @@ import com.convenitent.framework.dialog.ConfirmDialogFragment;
 import com.convenitent.framework.http.volley.VolleyFactory;
 import com.convenitent.framework.utils.ViewUtils;
 import com.convenitent.test.R;
+import com.convenitent.test.view.DownLoadView;
 
 public class MainActivity extends SupportActivity implements View.OnClickListener{
 
     private Button dialog1Btn;
     private Button dialog2Btn;
     private Button dialog3Btn;
+
+    private Button downloadbtn;
+    private DownLoadView downLoadView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,9 +30,12 @@ public class MainActivity extends SupportActivity implements View.OnClickListene
         dialog1Btn = ViewUtils.$(this,R.id.btn_customer);
         dialog2Btn = ViewUtils.$(this,R.id.btn_confirm);
         dialog3Btn = ViewUtils.$(this,R.id.btn_progress);
+        downloadbtn = ViewUtils.$(this,R.id.btn_start);
+        downLoadView = ViewUtils.$(this,R.id.downLoadView);
         dialog1Btn.setOnClickListener(this);
         dialog2Btn.setOnClickListener(this);
         dialog3Btn.setOnClickListener(this);
+        downloadbtn.setOnClickListener(this);
         VolleyFactory.getInstance(getApplicationContext()).initVolley();
     }
 
@@ -71,6 +78,9 @@ public class MainActivity extends SupportActivity implements View.OnClickListene
                 break;
             case R.id.btn_progress:
                 mDialogFactory.showProgressDialog("请稍等",true);
+                break;
+            case R.id.btn_start:
+                downLoadView.start();
                 break;
         }
     }

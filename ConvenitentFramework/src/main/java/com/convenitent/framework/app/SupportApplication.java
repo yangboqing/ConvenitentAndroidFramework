@@ -21,7 +21,4 @@ public class SupportApplication extends Application {
         //初始化默认图片加载框架
         new UniversalImageLoader().init();
     }
-
-
-
 }
