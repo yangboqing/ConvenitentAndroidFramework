@@ -1,6 +1,7 @@
 package com.convenitent.test.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class MainActivity extends SupportActivity implements View.OnClickListene
     private Button dialog1Btn;
     private Button dialog2Btn;
     private Button dialog3Btn;
+    private Button dialog4Btn;
 
     private Button downloadbtn;
     private DownLoadView downLoadView;
@@ -27,14 +29,16 @@ public class MainActivity extends SupportActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initFullScreen();
-        dialog1Btn = ViewUtils.$(this,R.id.btn_customer);
+        dialog1Btn = ViewUtils.$(this, R.id.btn_customer);
         dialog2Btn = ViewUtils.$(this,R.id.btn_confirm);
         dialog3Btn = ViewUtils.$(this,R.id.btn_progress);
+        dialog4Btn = ViewUtils.$(this,R.id.btn_listview);
         downloadbtn = ViewUtils.$(this,R.id.btn_start);
         downLoadView = ViewUtils.$(this,R.id.downLoadView);
         dialog1Btn.setOnClickListener(this);
         dialog2Btn.setOnClickListener(this);
         dialog3Btn.setOnClickListener(this);
+        dialog4Btn.setOnClickListener(this);
         downloadbtn.setOnClickListener(this);
         VolleyFactory.getInstance(getApplicationContext()).initVolley();
     }
@@ -68,7 +72,7 @@ public class MainActivity extends SupportActivity implements View.OnClickListene
                 mDialogFactory.showProgressDialog("请稍等",true);
                 break;
             case R.id.btn_confirm:
-                mDialogFactory.showConfirmDialog("提示", "测试信息", true, new ConfirmDialogFragment.ConfirmDialogListener() {
+                mDialogFactory.showConfirmDialog("提示", "测试信息", true,false, new ConfirmDialogFragment.ConfirmDialogListener() {
 
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -78,6 +82,10 @@ public class MainActivity extends SupportActivity implements View.OnClickListene
                 break;
             case R.id.btn_progress:
                 mDialogFactory.showProgressDialog("请稍等",true);
+                break;
+            case R.id.btn_listview:
+                Intent intent = new Intent(this,RecyclerActivity.class);
+                startActivity(intent);
                 break;
             case R.id.btn_start:
                 downLoadView.start();

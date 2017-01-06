@@ -1,4 +1,4 @@
-package com.convenitent.framework.image;
+package com.convenitent.framework.network;
 
 /**
  * Created by yangboqing on 2016/11/28.

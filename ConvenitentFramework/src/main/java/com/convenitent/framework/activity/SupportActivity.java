@@ -9,11 +9,9 @@ import com.convenitent.framework.dialog.DialogFactory;
 /**
  * Created by yangboqing on 16/8/17.
  */
-public class SupportActivity extends AppCompatActivity{
+public class SupportActivity extends AppCompatActivity {
 
     protected DialogFactory mDialogFactory;
-
-
 
 
     public BaseDialogFragment.BaseDialogListener getDialogListener(){

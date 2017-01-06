@@ -20,11 +20,11 @@ public class BaseDialogFragment extends AppCompatDialogFragment{
     private static final String EXTRA_DIALOG_TITLE_KEY = "extra_dialog_title_key";
     private static final String EXTRA_DIALOG_MESSAGE_KEY = "extra_dialog_message_key";
     private static final String EXTRA_DIALOG_CANELABLE_KEY = "extra_dialog_cancelable";
-    private static final String EXTRA_DIALOG_IS_CUSTOM_KEY = "extra_dialog_is_custom";
+    private static final String EXTRA_DIALOG_IS_CUSTOM_KEY = "extra_dialog_custom_layout_id";
     private static final String EXTRA_DIALOG_ID_KEY = "extra_dialog_id";
 
     //是否是自定义dialog
-    protected boolean mIsCustomDialog = false;
+    protected int mCustomLayoutId = -1;
     //每个对话框的ID
     protected int mDialogId;
     protected boolean mIsCancelable;
@@ -120,7 +120,7 @@ public class BaseDialogFragment extends AppCompatDialogFragment{
         mDialogId = args.getInt(EXTRA_DIALOG_ID_KEY);
         mTitle = args.getString(EXTRA_DIALOG_TITLE_KEY);
         mIsCancelable = args.getBoolean(EXTRA_DIALOG_CANELABLE_KEY);
-        mIsCustomDialog = args.getBoolean(EXTRA_DIALOG_IS_CUSTOM_KEY);
+        mCustomLayoutId = args.getInt(EXTRA_DIALOG_IS_CUSTOM_KEY);
     }
 
     protected static void putIdParam(Bundle args, int dialogId) {
@@ -130,8 +130,8 @@ public class BaseDialogFragment extends AppCompatDialogFragment{
     }
 
     @NonNull
-    protected static void putIsCustomParam(Bundle args, boolean isCustomDialog) {
-        args.putBoolean(EXTRA_DIALOG_IS_CUSTOM_KEY, isCustomDialog);
+    protected static void putCustomLayoutParam(Bundle args, int layoutId) {
+        args.putInt(EXTRA_DIALOG_IS_CUSTOM_KEY, layoutId);
     }
 
     @NonNull

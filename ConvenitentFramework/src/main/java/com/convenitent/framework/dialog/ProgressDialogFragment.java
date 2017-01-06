@@ -10,20 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import com.convenitent.framework.R;
-
 /**
  * Created by yangboqing on 16/8/17.
  * 自定义进度dialog
  */
 public class ProgressDialogFragment extends BaseDialogFragment {
 
-    public static ProgressDialogFragment newInstance(String message, boolean cancelable){
+    public static ProgressDialogFragment newInstance(String message, boolean cancelable,int layoutId){
 
         ProgressDialogFragment dialog = new ProgressDialogFragment();
         Bundle bundle = new Bundle();
         putMessageParam(bundle,message);
         putCancelableParam(bundle,cancelable);
+        putCustomLayoutParam(bundle,layoutId);
         dialog.setArguments(bundle);
         return  dialog;
     }
@@ -32,7 +31,7 @@ public class ProgressDialogFragment extends BaseDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        if(!mIsCustomDialog){
+        if(mCustomLayoutId == -1){
             ProgressDialog dialog = new ProgressDialog(getActivity());
             String message = parseMessageParam();
             dialog.setMessage(message);
@@ -51,8 +50,8 @@ public class ProgressDialogFragment extends BaseDialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(mIsCustomDialog){
-            View view = inflater.inflate(R.layout.dialog_custom_progress,container,false);
+        if(mCustomLayoutId != -1){
+            View view = inflater.inflate(mCustomLayoutId,container,false);
             //启用窗体的扩展特性。
             getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
             return view;

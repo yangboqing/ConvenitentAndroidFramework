@@ -1,7 +1,7 @@
-package com.convenitent.framework.image.universal;
+package com.convenitent.framework.network.universal;
 
 import com.convenitent.framework.app.$;
-import com.convenitent.framework.image.BasicInitImageLoader;
+import com.convenitent.framework.network.BasicInitImageLoader;
 import com.convenitent.framework.utils.AppUtils;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;

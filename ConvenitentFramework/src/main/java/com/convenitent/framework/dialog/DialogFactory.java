@@ -56,7 +56,30 @@ public class DialogFactory {
                 ft.remove(fragment).commit();
             }
 
-            ProgressDialogFragment progressDialogFragment = ProgressDialogFragment.newInstance(message, cancelable);
+            ProgressDialogFragment progressDialogFragment = ProgressDialogFragment.newInstance(message, cancelable,-1);
+            progressDialogFragment.show(mFragmentManager, DIALOG_PROGRESS_TAG);
+
+            mFragmentManager.executePendingTransactions();
+        }
+    }
+    /**
+     * @param message 进度条显示的信息
+     * @param cancelable 点击空白处是否可以取消
+     * @param layoutId 自定义布局id
+     */
+    public void showCustomProgressDialog(String message, boolean cancelable,int layoutId){
+        if(mFragmentManager != null){
+
+            /**
+             * 为了不重复显示dialog，在显示对话框之前移除正在显示的对话框。
+             */
+            FragmentTransaction ft = mFragmentManager.beginTransaction();
+            Fragment fragment = mFragmentManager.findFragmentByTag(DIALOG_PROGRESS_TAG);
+            if (null != fragment) {
+                ft.remove(fragment).commit();
+            }
+
+            ProgressDialogFragment progressDialogFragment = ProgressDialogFragment.newInstance(message, cancelable,layoutId);
             progressDialogFragment.show(mFragmentManager, DIALOG_PROGRESS_TAG);
 
             mFragmentManager.executePendingTransactions();
@@ -81,7 +104,7 @@ public class DialogFactory {
      * @param cancelable
      * @param listener
      */
-    public void showConfirmDialog(String title,String message,boolean cancelable, ConfirmDialogFragment.ConfirmDialogListener listener){
+    public void showConfirmDialog(String title,String message,boolean cancelable,boolean isCustomDialog, ConfirmDialogFragment.ConfirmDialogListener listener){
 
         FragmentTransaction ft = mFragmentManager.beginTransaction();
         Fragment fragment = mFragmentManager.findFragmentByTag(DIALOG_CONFIRM_TAG);
@@ -89,11 +112,29 @@ public class DialogFactory {
             ft.remove(fragment);
         }
         mListenerHolder.setDialogListener(listener);
-        DialogFragment df = ConfirmDialogFragment.newInstance(title, message, cancelable);
+        DialogFragment df = ConfirmDialogFragment.newInstance(title, message, cancelable,-1);
         df.show(mFragmentManager,DIALOG_CONFIRM_TAG);
         mFragmentManager.executePendingTransactions();
-
     }
 
+    /**
+     *     //显示自定义确认对话框，dialogId是用来区分不同对话框的
+     * @param title 对话框title
+     * @param message
+     * @param cancelable
+     * @param listener
+     */
+    public void showCustomConfirmDialog(String title,String message,boolean cancelable,int layoutId, ConfirmDialogFragment.ConfirmDialogListener listener){
+
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        Fragment fragment = mFragmentManager.findFragmentByTag(DIALOG_CONFIRM_TAG);
+        if (null != fragment) {
+            ft.remove(fragment);
+        }
+        mListenerHolder.setDialogListener(listener);
+        DialogFragment df = ConfirmDialogFragment.newInstance(title, message, cancelable,layoutId);
+        df.show(mFragmentManager,DIALOG_CONFIRM_TAG);
+        mFragmentManager.executePendingTransactions();
+    }
 
 }

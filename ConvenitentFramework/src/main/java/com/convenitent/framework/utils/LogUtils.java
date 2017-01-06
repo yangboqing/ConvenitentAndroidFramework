@@ -143,8 +143,10 @@ public final class LogUtils {
     private static String buildLogString(String str) {
         StackTraceElement caller = new Throwable().fillInStackTrace().getStackTrace()[2];
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("|===================================================================\n");
         if (TextUtils.isEmpty($.sTAG)) {
-            stringBuilder.append(caller.getMethodName())
+            stringBuilder
+                    .append(" "+caller.getMethodName())
                     .append("():")
                     .append(caller.getLineNumber())
                     .append(":")
@@ -159,6 +161,7 @@ public final class LogUtils {
                     .append(":")
                     .append(str);
         }
+        stringBuilder.append("\n===================================================================|");
         return stringBuilder.toString();
     }
 }

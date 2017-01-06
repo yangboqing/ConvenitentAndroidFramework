@@ -2,7 +2,7 @@ package com.convenitent.framework.app;
 
 import android.app.Application;
 
-import com.convenitent.framework.image.universal.UniversalImageLoader;
+import com.convenitent.framework.network.universal.UniversalImageLoader;
 
 /**
  * 初始化Application一些工作

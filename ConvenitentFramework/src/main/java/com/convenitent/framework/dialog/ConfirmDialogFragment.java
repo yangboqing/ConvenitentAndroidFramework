@@ -32,12 +32,13 @@ public class ConfirmDialogFragment extends BaseDialogFragment {
      * @param cancelable
      * @return
      */
-    public static ConfirmDialogFragment newInstance(String title,String message,boolean cancelable){
+    public static ConfirmDialogFragment newInstance(String title,String message,boolean cancelable,int layoutId){
         ConfirmDialogFragment instance = new ConfirmDialogFragment();
         Bundle args = new Bundle();
         putTitleParam(args,title);
         putMessageParam(args,message);
         putCancelableParam(args,cancelable);
+        putCustomLayoutParam(args,layoutId);
         instance.setArguments(args);
         return instance;
     }
@@ -51,7 +52,7 @@ public class ConfirmDialogFragment extends BaseDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        if (!mIsCustomDialog){
+        if (mCustomLayoutId == -1){
             AlertDialog dialog = new AlertDialog.Builder(getActivity())
                     .setTitle(mTitle==null?getString(R.string.app_name):mTitle)
                     .setMessage(message == null?" ":message)
@@ -81,8 +82,8 @@ public class ConfirmDialogFragment extends BaseDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
     Bundle savedInstanceState) {
-        if (mIsCustomDialog){
-            View view = inflater.inflate(R.layout.dialog_custom_progress,container,false);
+        if (mCustomLayoutId != -1){
+            View view = inflater.inflate(mCustomLayoutId,container,false);
             //启用窗体的扩展特性。
             getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
             return view;

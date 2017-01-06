@@ -20,22 +20,28 @@
         android:text="自定义dialog测试"/>
 
     <Button
-        android:id="@+id/btn_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="confirm dialog测试"/>
-
-    <Button
         android:id="@+id/btn_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="progress dialog测试"/>
 
     <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="confirm dialog测试"/>
+
+    <Button
         android:id="@+id/btn_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="开始"/>
+
+    <Button
+        android:id="@+id/btn_listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="recycler view"/>
 
     <com.convenitent.test.view.DownLoadView
         android:id="@+id/downLoadView"

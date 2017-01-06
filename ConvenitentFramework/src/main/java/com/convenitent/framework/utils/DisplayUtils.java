@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Window;
 
 import com.convenitent.framework.R;
@@ -46,8 +47,10 @@ public final class DisplayUtils {
      * @return
      */
     public static int $dp2px(float dp) {
-        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+//        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+        return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp,Resources.getSystem().getDisplayMetrics());
     }
+
 
     /**
      * 获取状态栏高度
