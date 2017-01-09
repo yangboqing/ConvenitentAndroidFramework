@@ -160,7 +160,7 @@ public class UpdateService extends Service {
 
         mPendingIntent = PendingIntent.getActivity(UpdateService.this, R.string.app_name, completingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        mNotification.icon = $.sUpdateIcon != 0 ? $.sUpdateIcon : R.mipmap.ic_launcher;
+        mNotification.icon = $.sUpdateIcon;
         mNotification.tickerText = getText(R.string.app_download_notification_start);
         mNotification.contentIntent = mPendingIntent;
         mNotification.contentView.setProgressBar(R.id.less_app_update_progressbar, 100, 0, false);
