@@ -13,6 +13,8 @@ public class App extends SupportApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        $.getInstance().log(true,TAG).build();
+        $.getInstance().log(true,TAG)
+                .update(null,R.mipmap.ic_launcher)
+                .build();
     }
 }

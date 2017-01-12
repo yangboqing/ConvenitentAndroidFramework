@@ -38,7 +38,7 @@ public class UniversalImageLoader implements BasicInitImageLoader {
                 .denyCacheImageMultipleSizesInMemory()
                 .memoryCache(new LruMemoryCache(5 * 1024 * 1024))
                 // 可以通过自己的内存缓存实现
-                .memoryCacheSize(AppUtils.getMemorySize() / 8)
+                .memoryCacheSize(AppUtils.$getMemorySize() / 8)
                 // 内存缓存的最大值
                 .diskCache(new UnlimitedDiskCache(cacheDir))
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())

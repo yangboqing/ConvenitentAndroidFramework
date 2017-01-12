@@ -6,10 +6,12 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Build;
 
 import com.convenitent.framework.app.$;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -95,18 +97,77 @@ public final class AppUtils {
      * @return 在前台则返回true,否则返回false
      */
     public static boolean isTopActivy(String activityName) {
-        ActivityManager manager = (ActivityManager) $.sAppContext.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
         String cmpNameTemp = null;
-
-        if (runningTaskInfos != null) {
-            cmpNameTemp = runningTaskInfos.get(0).topActivity.getShortClassName();
-        }
-
+        //这里是对android 5.0系统get_task权限进行兼容
+//        if (Build.VERSION.SDK_INT < 21) { // 如果版本低于22
+            ActivityManager manager = (ActivityManager) $.sAppContext.getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
+            if (runningTaskInfos != null) {
+                cmpNameTemp = runningTaskInfos.get(0).topActivity.getShortClassName();
+            }
+//        }else{
+//            final int PROCESS_STATE_TOP = 2;
+//            try {
+//                // 获取正在运行的进程应用的信息实体中的一个字段,通过反射获取出来
+//                Field processStateField = ActivityManager.RunningAppProcessInfo.class.getDeclaredField("processState");
+//                // 获取所有的正在运行的进程应用信息实体对象
+//                List<ActivityManager.RunningAppProcessInfo> processes = ((ActivityManager) $.sAppContext
+//                        .getSystemService(Context.ACTIVITY_SERVICE)).getRunningAppProcesses();
+//                // 循环所有的进程,检测某一个进程的状态是最上面,也是就最近运行的一个应用的状态的时候,就返回这个应用的包名
+//                for (ActivityManager.RunningAppProcessInfo process : processes) {
+//                    if (process.importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+//                            && process.importanceReasonCode == 0) {
+//                        int state = processStateField.getInt(process);
+//                        if (state == PROCESS_STATE_TOP) { // 如果这个实体对象的状态为最近的运行应用
+//                            cmpNameTemp = process.importanceReasonComponent.getShortClassName();
+//                        }
+//                    }
+//                }
+//            } catch (Exception e) {
+//            }
+//        }
         if (cmpNameTemp == null) {
             return false;
         }
         return cmpNameTemp.endsWith(activityName);
+    }
+
+    /**
+     * 获取当前显示的app的包名
+     * @return
+     */
+    public static String $getTopProcessPackageName(){
+        String cmpNameTemp = null;
+        //这里是对android 5.0系统get_task权限进行兼容
+        if (Build.VERSION.SDK_INT < 21) { // 如果版本低于22
+            ActivityManager manager = (ActivityManager) $.sAppContext.getSystemService(Context.ACTIVITY_SERVICE);
+
+            List<ActivityManager.RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
+            if (runningTaskInfos != null) {
+                cmpNameTemp = runningTaskInfos.get(0).topActivity.getPackageName();
+            }
+        }else{
+            final int PROCESS_STATE_TOP = 2;
+            try {
+                // 获取正在运行的进程应用的信息实体中的一个字段,通过反射获取出来
+                Field processStateField = ActivityManager.RunningAppProcessInfo.class.getDeclaredField("processState");
+                // 获取所有的正在运行的进程应用信息实体对象
+                List<ActivityManager.RunningAppProcessInfo> processes = ((ActivityManager) $.sAppContext
+                        .getSystemService(Context.ACTIVITY_SERVICE)).getRunningAppProcesses();
+                // 循环所有的进程,检测某一个进程的状态是最上面,也是就最近运行的一个应用的状态的时候,就返回这个应用的包名
+                for (ActivityManager.RunningAppProcessInfo process : processes) {
+                    if (process.importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+                            && process.importanceReasonCode == 0) {
+                        int state = processStateField.getInt(process);
+                        if (state == PROCESS_STATE_TOP) { // 如果这个实体对象的状态为最近的运行应用
+                            cmpNameTemp = process.processName;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+            }
+        }
+        return cmpNameTemp;
     }
 
     /**
@@ -143,7 +204,7 @@ public final class AppUtils {
      * 获取dalvik给应用所分配的堆大小
      * @return
      */
-    public static int getMemorySize() {
+    public static int $getMemorySize() {
         ActivityManager activityManager = (ActivityManager) $.sAppContext.getSystemService(Context
                 .ACTIVITY_SERVICE);
         int memClass = activityManager.getMemoryClass();

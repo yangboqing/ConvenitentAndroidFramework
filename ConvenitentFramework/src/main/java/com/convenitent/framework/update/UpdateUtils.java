@@ -30,9 +30,9 @@ public final class UpdateUtils {
      * @return 有更新则返回true,否则返回false
      */
     public static boolean $check(final Context context, String updateJson) {
-        int vercode = 0;
-        String vername = "";
-        String log = "";
+        int vercode;
+        String vername;
+        String log;
         String download;
 
         JSONObject jsonObject;

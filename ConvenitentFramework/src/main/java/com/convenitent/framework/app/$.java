@@ -59,18 +59,15 @@ public class $ {
      * UpdateUtils
      * *********************************************************************************************
      */
-    public static int sNotificationFrequent = 5;
     public static String sDownloadSDPath;
     public static int sUpdateIcon;
     @Deprecated
-    public $ update(String downloadSDPath, int notificationFrequent) {
-        sNotificationFrequent = notificationFrequent;
+    public $ update(String downloadSDPath) {
         sDownloadSDPath = downloadSDPath;
         return this;
     }
 
-    public $ update(String downloadSDPath, int notificationFrequent, int updateIcon) {
-        sNotificationFrequent = notificationFrequent;
+    public $ update(String downloadSDPath, int updateIcon) {
         sDownloadSDPath = downloadSDPath;
         sUpdateIcon = updateIcon;
         return this;

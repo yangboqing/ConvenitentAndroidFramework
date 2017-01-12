@@ -88,7 +88,18 @@ public class MainActivity extends SupportActivity implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.btn_start:
-                downLoadView.start();
+//                downLoadView.start();
+//                JSONObject object = new JSONObject();
+//                try {
+//                    object.put("vercode",2);
+//                    object.put("vername","v1.1");
+//                    object.put("download","http://static.medical-lighter.com/AndoridAPK/list/1688c0dd3fd1dce1529a42589fb23649/medical-lighter_v2.8.1_2017-01-06_10000.apk");
+//                    object.put("log","更新说明");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                UpdateUtils.$check(this,object.toString());
+//                AppUtils.isTopActivy(getClass().getName());
                 break;
         }
     }

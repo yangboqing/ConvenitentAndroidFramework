@@ -8,18 +8,21 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.convenitent.framework.R;
 import com.convenitent.framework.app.$;
 import com.convenitent.framework.http.DownloadUtils;
+import com.convenitent.framework.utils.AppUtils;
+import com.convenitent.framework.utils.LogUtils;
 import com.convenitent.framework.utils.ToastUtils;
 
 import java.io.File;
@@ -38,11 +41,12 @@ public class UpdateService extends Service {
     private static final int DOWNLOAD_STATE_INSTALL = 2;
     private static final int DOWNLOAD_STATE_ERROR_SDCARD = 3;
     private static final int DOWNLOAD_STATE_ERROR_URL = 4;
+    private static final int DOWNLOAD_STATE_ERROR_FILE = 5;
 
     private static final int NOTIFICATION_ID = 3956;
     private NotificationManager mNotificationManager = null;
-    private Notification mNotification = null;
     private PendingIntent mPendingIntent = null;
+    private NotificationCompat.Builder mBuilder;
 
     private String mDownloadSDPath;
     private String mDownloadUrl;
@@ -75,6 +79,10 @@ public class UpdateService extends Service {
                 case DOWNLOAD_STATE_ERROR_URL:
                     Toast.makeText(getApplicationContext(), R.string.app_download_error_url, Toast.LENGTH_LONG).show();
                     break;
+                case DOWNLOAD_STATE_ERROR_FILE:
+                    Toast.makeText(getApplicationContext(), R.string.app_download_error_file, Toast.LENGTH_LONG).show();
+                    mNotificationManager.cancel(NOTIFICATION_ID);
+                    break;
                 default:
                     break;
             }
@@ -85,22 +93,23 @@ public class UpdateService extends Service {
 
     private DownloadUtils.DownloadCallBack mDownloadCallBack = new DownloadUtils.DownloadCallBack() {
 
+        private int mCurrentProgress = 0;
+
         @Override
         public void onDownloading(int progress) {
-            if (progress % $.sNotificationFrequent == 0 || progress == 1 || progress == 100) {
-                mNotification.contentView.setProgressBar(R.id.less_app_update_progressbar, 100, progress, false);
-                mNotification.contentView.setTextViewText(R.id.less_app_update_progress_text, progress + "%");
-                mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+            if (progress != mCurrentProgress || progress == 100) {
+                    mCurrentProgress = progress;
+                mBuilder.setProgress(100,mCurrentProgress,false);
+                mBuilder.setContentText(getString(R.string.app_download_downloading) + progress + "%");
+                mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
             }
         }
 
         @Override
         public void onDownloaded() {
-            mNotification.contentView.setViewVisibility(R.id.less_app_update_progress_block, View.GONE);
-            mNotification.defaults = Notification.DEFAULT_SOUND;
-            mNotification.contentIntent = mPendingIntent;
-            mNotification.contentView.setTextViewText(R.id.less_app_update_progress_text, getText(R.string.app_download_notification_success));
-            mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+            mBuilder.setDefaults(Notification.DEFAULT_ALL);
+            mBuilder.setContentText(getText(R.string.app_download_notification_success));
+            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
             if (mDestFile.exists() && mDestFile.isFile() && checkApkFile(mDestFile.getPath())) {
                 Message msg = mHandler.obtainMessage();
                 msg.what = DOWNLOAD_STATE_SUCCESS;
@@ -137,7 +146,6 @@ public class UpdateService extends Service {
             if (mDestDir.exists()) {
                 File destFile = new File(mDestDir.getPath() + "/" + URLEncoder.encode(mDownloadUrl));
                 if (destFile.exists() && destFile.isFile() && checkApkFile(destFile.getPath())) {
-
                     sendMessage(DOWNLOAD_STATE_INSTALL);
                     install(destFile);
                     stopSelf();
@@ -150,26 +158,24 @@ public class UpdateService extends Service {
         }
 
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotification = new Notification();
+        mBuilder = new NotificationCompat.Builder(this);
 
-        mNotification.contentView = new RemoteViews(getApplication().getPackageName(), R.layout.app_update_notification);
-
+        mBuilder.setContentTitle(AppUtils.$appname());
+        mBuilder.setContentText(getText(R.string.app_download_notification_start));
+        mBuilder.setProgress(100, 0, false);
+        mBuilder.setAutoCancel(true);
         Intent completingIntent = new Intent();
         completingIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         completingIntent.setClass(getApplicationContext(), UpdateService.class);
 
         mPendingIntent = PendingIntent.getActivity(UpdateService.this, R.string.app_name, completingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        mNotification.icon = $.sUpdateIcon;
-        mNotification.tickerText = getText(R.string.app_download_notification_start);
-        mNotification.contentIntent = mPendingIntent;
-        mNotification.contentView.setProgressBar(R.id.less_app_update_progressbar, 100, 0, false);
-        mNotification.contentView.setTextViewText(R.id.less_app_update_progress_text, "0%");
+        mBuilder.setTicker(getText(R.string.app_download_notification_start));
+        mBuilder.setContentIntent(mPendingIntent);
         if ($.sUpdateIcon != 0) {
-            mNotification.contentView.setImageViewResource(R.id.less_app_update_progress_icon, $.sUpdateIcon);
+            mBuilder.setSmallIcon($.sUpdateIcon);
         }
         mNotificationManager.cancel(NOTIFICATION_ID);
-        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
         // 启动线程开始下载
         new UpdateThread().start();
@@ -204,9 +210,16 @@ public class UpdateService extends Service {
      * @param apkFile
      */
     private void install(File apkFile) {
-        Uri uri = Uri.fromFile(apkFile);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri;
+        //android N 7.0系统个判断
+        if (Build.VERSION.SDK_INT >= 24) {
+            uri = FileProvider.getUriForFile(this, getString(R.string.provider_file_authorities), apkFile);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            uri = Uri.fromFile(apkFile);
+        }
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
         startActivity(intent);
     }
@@ -246,30 +259,36 @@ public class UpdateService extends Service {
                 }
 
                 if (mDestDir.exists() || mDestDir.mkdirs()) {
-                    mDestFile = new File(mDestDir.getPath()
-                            + "/" + URLEncoder.encode(mDownloadUrl));
-
-                    if (mDestFile.exists()
-                            && mDestFile.isFile()
-                            && checkApkFile(mDestFile.getPath())) {
-                        sendMessage(DOWNLOAD_STATE_INSTALL);
-                        install(mDestFile);
-                    } else {
-                        try {
-                            sendMessage(DOWNLOAD_STATE_START);
-                            mIsDownloading = true;
-                            DownloadUtils.$download(mDownloadUrl, mDestFile, false, mDownloadCallBack);
-                        } catch (Exception e) {
-                            sendMessage(DOWNLOAD_STATE_FAILURE);
-                            e.printStackTrace();
-                        }
-                    }
+                    LogUtils.$d("start download apk to sdcard download apk.");
+                    download();
+                }else{
+                    sendMessage(DOWNLOAD_STATE_ERROR_FILE);
                 }
             } else {
                 sendMessage(DOWNLOAD_STATE_ERROR_SDCARD);
             }
             mIsDownloading = false;
             stopSelf();
+        }
+    }
+
+    private void download() {
+        mDestFile = new File(mDestDir.getPath() + "/" + URLEncoder.encode(mDownloadUrl));
+
+        if (mDestFile.exists()
+                && mDestFile.isFile()
+                && checkApkFile(mDestFile.getPath())) {
+            sendMessage(DOWNLOAD_STATE_INSTALL);
+            install(mDestFile);
+        } else {
+            try {
+                sendMessage(DOWNLOAD_STATE_START);
+                mIsDownloading = true;
+                DownloadUtils.$download(mDownloadUrl, mDestFile, false, mDownloadCallBack);
+            } catch (Exception e) {
+                sendMessage(DOWNLOAD_STATE_FAILURE);
+                e.printStackTrace();
+            }
         }
     }
 }
