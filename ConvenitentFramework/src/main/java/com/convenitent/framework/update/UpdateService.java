@@ -50,6 +50,7 @@ public class UpdateService extends Service {
 
     private String mDownloadSDPath;
     private String mDownloadUrl;
+    private String mPackageNames;
     private File mDestDir;
     private File mDestFile;
 
@@ -129,6 +130,7 @@ public class UpdateService extends Service {
         }
 
         mDownloadUrl = intent.getStringExtra($.KEY_DOWNLOAD_URL);
+        mPackageNames = intent.getStringExtra($.KEY_DOWNLOAD_PACKAGE);
         if (TextUtils.isEmpty($.sDownloadSDPath)) {
             mDownloadSDPath = getPackageName() + "/download";
         } else {
@@ -215,7 +217,7 @@ public class UpdateService extends Service {
         Uri uri;
         //android N 7.0系统个判断
         if (Build.VERSION.SDK_INT >= 24) {
-            uri = FileProvider.getUriForFile(this, getString(R.string.provider_file_authorities), apkFile);
+            uri = FileProvider.getUriForFile(this, mPackageNames+".fileprovider", apkFile);
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             uri = Uri.fromFile(apkFile);

@@ -48,6 +48,7 @@ public class $ {
      * *********************************************************************************************
      */
     public static final String KEY_DOWNLOAD_URL = "download_url";
+    public static final String KEY_DOWNLOAD_PACKAGE = "download_package";
     static String sUpdateJsonUrl;
     public $ app(String updateJsonUrl) {
         sUpdateJsonUrl = updateJsonUrl;

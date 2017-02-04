@@ -79,6 +79,7 @@ public final class UpdateUtils {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(context, UpdateService.class);
                         intent.putExtra($.KEY_DOWNLOAD_URL, download);
+                        intent.putExtra($.KEY_DOWNLOAD_PACKAGE,context.getPackageName());
                         context.startService(intent);
                     }
                 }).show();

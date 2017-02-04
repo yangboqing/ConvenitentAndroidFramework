@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "24.0.3"
 
     //volley内部还在sdk_int<9时使用httpclient类来进行网络请求
     useLibrary 'org.apache.http.legacy'
