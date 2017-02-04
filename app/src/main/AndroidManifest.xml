@@ -26,6 +26,8 @@
             android:label="@string/title_activity_over_lay_card"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".activity.LoginActivity">
+        </activity>
     </application>
 
 </manifest>

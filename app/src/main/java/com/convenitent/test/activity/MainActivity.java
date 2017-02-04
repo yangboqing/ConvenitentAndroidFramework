@@ -100,7 +100,12 @@ public class MainActivity extends SupportActivity implements View.OnClickListene
 //                }
 //                UpdateUtils.$check(this,object.toString());
 //                AppUtils.isTopActivy(getClass().getName());
+//                DeviceUtils.$mac();
+                    Intent starter = new Intent(this, LoginActivity
+                            .class);
+                    startActivity(starter);
                 break;
         }
     }
+
 }
