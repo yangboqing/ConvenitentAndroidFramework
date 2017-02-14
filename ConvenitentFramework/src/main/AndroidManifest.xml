@@ -21,6 +21,10 @@
                        <!--android:resource="@xml/file_paths"/>-->
         <!--</provider>-->
 
+        <activity android:name=".activity.SupportFragmentActivity"
+                  android:configChanges="orientation|screenSize|keyboardHidden|navigation"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>
