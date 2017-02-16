@@ -25,8 +25,8 @@ public abstract class SupportListFragment extends SupportFragment implements Sup
     public static final int VERTICAL = 0;
     public static final int HORIZONTAL = 1;
 
-    private LoadMoreRecyclerView mRecyclerView;
-    private SwipeRefreshLayout mRefreshLayout;
+    protected LoadMoreRecyclerView mRecyclerView;
+    protected SwipeRefreshLayout mRefreshLayout;
     private FrameLayout mGroupLayout;
     private View mEmptyView;
     public int page = 1;
