@@ -16,11 +16,11 @@ import android.view.ViewGroup;
 
 public class LoadMoreRecyclerView extends RecyclerView {
 
-    public static final int TYPE_NORMAL = 0;
+//    public static final int TYPE_NORMAL = 0;
     public final static int TYPE_HEADER = 1;//头部--支持头部增加一个headerView
     public final static int TYPE_FOOTER = 2;//底部--往往是loading_more
-    public final static int TYPE_LIST = 3;//代表item展示的模式是list模式
-    public final static int TYPE_STAGGER = 4;//代码item展示模式是网格模式
+//    public final static int TYPE_LIST = 3;//代表item展示的模式是list模式
+//    public final static int TYPE_STAGGER = 4;//代码item展示模式是网格模式
 
     private boolean mIsFooterEnable = false;//是否允许加载更多
 
@@ -208,13 +208,14 @@ public class LoadMoreRecyclerView extends RecyclerView {
             /**
              * 这么做保证layoutManager切换之后能及时的刷新上对的布局
              */
-            if (getLayoutManager() instanceof LinearLayoutManager) {
-                return TYPE_LIST;
-            } else if (getLayoutManager() instanceof StaggeredGridLayoutManager) {
-                return TYPE_STAGGER;
-            } else {
-                return TYPE_NORMAL;
-            }
+//            if (getLayoutManager() instanceof LinearLayoutManager) {
+//                return TYPE_LIST;
+//            } else if (getLayoutManager() instanceof StaggeredGridLayoutManager) {
+//                return TYPE_STAGGER;
+//            } else {
+//                return TYPE_NORMAL;
+//            }
+            return mInternalAdapter.getItemViewType(position);
         }
 
         @Override
