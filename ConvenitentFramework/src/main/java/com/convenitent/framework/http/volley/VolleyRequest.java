@@ -19,13 +19,13 @@ import java.util.Map;
  * Created by yangboqing on 2016/11/24.
  */
 
-public class VolleyRequest<T> extends Request<BaseParser<T>> {
+public class VolleyRequest<T extends BaseParser> extends Request<T> {
 
-    private BaseParser<T> parser;
-    private final Response.Listener<BaseParser<T>> mListener;
+    private T parser;
+    private final Response.Listener<T> mListener;
     private final Map<String, String> mRequestBody;
 
-    public VolleyRequest(final String url, Map<String, String> requestContent, final BaseParser<T> parser, final RequestCallBack callBack){
+    public VolleyRequest(final String url, Map<String, String> requestContent, final T parser, final RequestCallBack<T> callBack){
         super(Method.POST, url, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -36,9 +36,9 @@ public class VolleyRequest<T> extends Request<BaseParser<T>> {
                 callBack.onResponseError(parser);
             }
         });
-        mListener = new Response.Listener<BaseParser<T>>() {
+        mListener = new Response.Listener<T>() {
             @Override
-            public void onResponse(BaseParser<T> response) {
+            public void onResponse(T response) {
                 if (parser == null || callBack == null) {
                     return;
                 }
@@ -57,7 +57,7 @@ public class VolleyRequest<T> extends Request<BaseParser<T>> {
 
     //可缓存数据的请求
     public VolleyRequest(final String url, Map<String, String> requestBody,
-                          final BaseParser parser, final RequestCallBack callBack, boolean isShouldCache) {
+                          final T parser, final RequestCallBack callBack, boolean isShouldCache) {
         super(Method.POST, url,new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -68,9 +68,9 @@ public class VolleyRequest<T> extends Request<BaseParser<T>> {
                 callBack.onResponseError(parser);
             }
         });
-        mListener = new Response.Listener<BaseParser<T>>() {
+        mListener = new Response.Listener<T>() {
             @Override
-            public void onResponse(BaseParser<T> response) {
+            public void onResponse(T response) {
                 if (parser == null || callBack == null) {
                     return;
                 }
@@ -86,7 +86,7 @@ public class VolleyRequest<T> extends Request<BaseParser<T>> {
         setShouldCache(isShouldCache);
     }
 
-    public VolleyRequest(final String url, final BaseParser parser,
+    public VolleyRequest(final String url, final T parser,
                           final RequestCallBack callBack) {
         super(Method.GET, url, new Response.ErrorListener() {
             @Override
@@ -98,9 +98,9 @@ public class VolleyRequest<T> extends Request<BaseParser<T>> {
                 callBack.onResponseError(parser);
             }
         });
-        mListener = new Response.Listener<BaseParser<T>>() {
+        mListener = new Response.Listener<T>() {
             @Override
-            public void onResponse(BaseParser<T> response) {
+            public void onResponse(T response) {
                 if (parser == null || callBack == null) {
                     return;
                 }
@@ -118,7 +118,7 @@ public class VolleyRequest<T> extends Request<BaseParser<T>> {
 
     @Override
     protected Response parseNetworkResponse(NetworkResponse response) {
-        Response<BaseParser<T>> success;
+        Response<T> success;
         try {
             String json = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
@@ -132,7 +132,7 @@ public class VolleyRequest<T> extends Request<BaseParser<T>> {
     }
 
     @Override
-    protected void deliverResponse(BaseParser<T> response) {
+    protected void deliverResponse(T response) {
         mListener.onResponse(response);
     }
 

@@ -4,8 +4,8 @@ package com.convenitent.framework.http;
  * Created by yangboqing on 2016/11/24.
  */
 
-public interface RequestCallBack {
+public interface RequestCallBack<T> {
 
-    void onResponseSuccess(BaseParser parser);
-    void onResponseError(BaseParser parser);
+    void onResponseSuccess(T parser);
+    void onResponseError(T parser);
 }

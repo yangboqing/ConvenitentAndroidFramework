@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class BaseParser<T> implements ParserInter{
+public class BaseParser implements ParserInter{
 
 	/**Error:默认值，网络错误.**/
 	public final static String ERROR = "-1";
