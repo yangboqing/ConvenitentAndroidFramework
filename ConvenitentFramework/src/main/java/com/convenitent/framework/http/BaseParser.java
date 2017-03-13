@@ -2,6 +2,8 @@ package com.convenitent.framework.http;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,7 +28,7 @@ public class BaseParser<T> implements ParserInter{
 	private JSONObject mResObj;
 
 	private boolean isCache;
-
+	private Gson mGson;
 
 	public BaseParser(String json) {
 		parser(json);
@@ -46,6 +48,7 @@ public class BaseParser<T> implements ParserInter{
 //			});
 			return ;
 		}
+		mGson = new Gson();
 		try {
 			JSONObject mResObj = new JSONObject(data);
 			setCode(String.valueOf(mResObj.optInt("code")));
@@ -90,5 +93,9 @@ public class BaseParser<T> implements ParserInter{
 
 	public void setCache(boolean cache) {
 		isCache = cache;
+	}
+
+	public Gson getGson() {
+		return mGson;
 	}
 }
