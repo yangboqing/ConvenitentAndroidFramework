@@ -62,7 +62,11 @@ public class BaseParser implements ParserInter{
 		}
 		try {
 			JSONObject mResObj = new JSONObject(data);
-			setCode(mResObj.optString("code"));
+			String code = mResObj.optString("code");
+			if (TextUtils.isEmpty(code)){
+				code = String.valueOf(mResObj.optInt("code"));
+			}
+			setCode(code);
 			setTips(mResObj.optString("tips"));
 		} catch (JSONException e) {
 			e.printStackTrace();

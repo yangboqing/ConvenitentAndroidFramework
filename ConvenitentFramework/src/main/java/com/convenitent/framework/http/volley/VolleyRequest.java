@@ -1,5 +1,7 @@
 package com.convenitent.framework.http.volley;
 
+import android.text.TextUtils;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -42,7 +44,7 @@ public class VolleyRequest<T extends BaseParser> extends Request<T> {
                 if (parser == null || callBack == null) {
                     return;
                 }
-                if (response.getCode() == BaseParser.SUCCESS){
+                if (response.getCode() == BaseParser.SUCCESS||TextUtils.equals(response.getCode(),BaseParser.SUCCESS)){
                     callBack.onResponseSuccess(response);
                 }else{
                     callBack.onResponseError(response);
@@ -74,7 +76,7 @@ public class VolleyRequest<T extends BaseParser> extends Request<T> {
                 if (parser == null || callBack == null) {
                     return;
                 }
-                if (parser.getCode() == BaseParser.SUCCESS){
+                if (response.getCode() == BaseParser.SUCCESS||TextUtils.equals(response.getCode(),BaseParser.SUCCESS)){
                     callBack.onResponseSuccess(response);
                 }else{
                     callBack.onResponseError(response);
@@ -104,7 +106,7 @@ public class VolleyRequest<T extends BaseParser> extends Request<T> {
                 if (parser == null || callBack == null) {
                     return;
                 }
-                if (parser.getCode() == BaseParser.SUCCESS){
+                if (response.getCode() == BaseParser.SUCCESS||TextUtils.equals(response.getCode(),BaseParser.SUCCESS)){
                     callBack.onResponseSuccess(response);
                 }else{
                     callBack.onResponseError(response);
