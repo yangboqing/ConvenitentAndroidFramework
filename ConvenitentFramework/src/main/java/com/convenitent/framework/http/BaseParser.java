@@ -1,5 +1,6 @@
 package com.convenitent.framework.http;
 
+import android.os.Build;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -31,7 +32,12 @@ public class BaseParser<T> implements ParserInter{
 	private Gson mGson;
 
 	public BaseParser(String json) {
+		mGson = new Gson();
 		parser(json);
+	}
+
+	public BaseParser() {
+		mGson = new Gson();
 	}
 
 	@Override
@@ -48,7 +54,12 @@ public class BaseParser<T> implements ParserInter{
 //			});
 			return ;
 		}
-		mGson = new Gson();
+		//Android 4.0及以上都已经在内部类中处理,Android 2.2至Android 2.3.3未作处理
+		if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1){
+			if (data != null && data.startsWith("\ufeff")) {
+				data = data.substring(1);
+			}
+		}
 		try {
 			JSONObject mResObj = new JSONObject(data);
 			setCode(String.valueOf(mResObj.optInt("code")));
