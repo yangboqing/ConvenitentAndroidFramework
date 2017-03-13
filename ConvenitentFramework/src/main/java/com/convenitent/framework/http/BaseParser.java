@@ -17,7 +17,7 @@ public class BaseParser<T> implements ParserInter{
 	public final static String EMPTY = "-3";
 
 	/** Success:服务器返回数据正常.**/
-	public final static String SUCCESS = "0";
+	public final static String SUCCESS = "200";
 
 	private String mCode;
 	private String mTips;
@@ -48,14 +48,14 @@ public class BaseParser<T> implements ParserInter{
 		}
 		try {
 			JSONObject jsonObject = new JSONObject(data);
-			mResObj = jsonObject.optJSONObject("result");
+			mResObj = jsonObject.optJSONObject("data");
 			if (mResObj == null) {
 				setCode(EMPTY);
 				return ;
 			}
-			setMessage(jsonObject.optString("message"));
-			setCode(mResObj.optString("code"));
-			setTips(mResObj.optString("tips"));
+//			setMessage(jsonObject.optString("message"));
+			setCode(String.valueOf(jsonObject.optInt("code")));
+			setTips(jsonObject.optString("tips"));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
