@@ -47,15 +47,9 @@ public class BaseParser<T> implements ParserInter{
 			return ;
 		}
 		try {
-			JSONObject jsonObject = new JSONObject(data);
-			mResObj = jsonObject.optJSONObject("data");
-			if (mResObj == null) {
-				setCode(EMPTY);
-				return ;
-			}
-//			setMessage(jsonObject.optString("message"));
-			setCode(String.valueOf(jsonObject.optInt("code")));
-			setTips(jsonObject.optString("tips"));
+			JSONObject mResObj = new JSONObject(data);
+			setCode(String.valueOf(mResObj.optInt("code")));
+			setTips(mResObj.optString("tips"));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
