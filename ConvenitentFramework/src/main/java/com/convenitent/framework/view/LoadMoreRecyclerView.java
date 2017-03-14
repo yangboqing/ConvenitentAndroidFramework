@@ -45,6 +45,8 @@ public class LoadMoreRecyclerView extends RecyclerView {
      */
     private LoadMoreListener mListener;
 
+    private AddOnCustomerScrollListener mScrollListener;
+
 
 
     public LoadMoreRecyclerView(Context context) {
@@ -76,6 +78,9 @@ public class LoadMoreRecyclerView extends RecyclerView {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                if (mScrollListener!=null){
+                    mScrollListener.onScrollStateChanged(recyclerView,newState);
+                }
             }
 
             @Override
@@ -88,6 +93,9 @@ public class LoadMoreRecyclerView extends RecyclerView {
                         mLoadMorePosition = lastVisiblePosition;
                         mListener.onLoadMore();
                     }
+                }
+                if (mScrollListener!=null){
+                    mScrollListener.onScrolled(recyclerView,dx,dy);
                 }
             }
         });
@@ -348,6 +356,14 @@ public class LoadMoreRecyclerView extends RecyclerView {
     }
 
     /**
+     * 设置滚动监听
+     * @param listener
+     */
+    public void setOnCustomerScrollListener(AddOnCustomerScrollListener listener){
+        this.mScrollListener = listener;
+    }
+
+    /**
      * 设置正在加载更多
      *
      * @param loadingMore
@@ -364,6 +380,15 @@ public class LoadMoreRecyclerView extends RecyclerView {
          * 加载更多
          */
         void onLoadMore();
+    }
+
+    /**
+     * 由于该recyclerview已经添加了滚动监听，因此需要把监听传到应用者本身
+     */
+    public interface AddOnCustomerScrollListener{
+
+        void onScrollStateChanged(RecyclerView recyclerView, int newState);
+        void onScrolled(RecyclerView recyclerView, int dx, int dy);
     }
 }
 
