@@ -29,7 +29,7 @@ public abstract class SupportListFragment extends SupportFragment implements Sup
     protected SwipeRefreshLayout mRefreshLayout;
     private FrameLayout mGroupLayout;
     private View mEmptyView;
-    public int page = 1;
+    private int page = 1;
 
 
     @Override
@@ -96,6 +96,7 @@ public abstract class SupportListFragment extends SupportFragment implements Sup
         mRecyclerView.setLoadMoreListener(new LoadMoreRecyclerView.LoadMoreListener() {
             @Override
             public void onLoadMore() {
+                page++;
                 onLoadMoreData(page);
             }
         });
