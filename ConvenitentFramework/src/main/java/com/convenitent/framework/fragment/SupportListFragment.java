@@ -195,6 +195,7 @@ public abstract class SupportListFragment extends SupportFragment implements Sup
     public final void hideEmptyView(){
         mRecyclerView.setVisibility(View.VISIBLE);
         mEmptyView.setVisibility(View.GONE);
+        
     }
 
     @Override
